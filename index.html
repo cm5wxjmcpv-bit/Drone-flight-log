@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drone Data Tracking</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="site-header">
+      <h1>Drone Data Tracking</h1>
+      <button id="logSessionBtn" class="primary-btn">Log Session</button>
+    </header>
+
+    <main>
+      <div class="top-actions">
+        <button id="addFlightBtn" class="secondary-btn">Add Flight</button>
+      </div>
+
+      <div id="statusMessage" class="status-message"></div>
+
+      <section id="flightsContainer" class="flights-container"></section>
+    </main>
+  </div>
+
+  <template id="flightTemplate">
+    <div class="flight-card">
+      <div class="flight-card-header">
+        <h2 class="flight-title">Flight <span class="flight-number"></span></h2>
+        <button type="button" class="remove-flight-btn">Remove</button>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Battery Number</label>
+          <select class="battery-number">
+            <option value="">Select battery</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Battery % Before Takeoff</label>
+          <input type="number" class="battery-start" min="0" max="100" placeholder="Enter %" />
+        </div>
+
+        <div class="form-group timestamp-group">
+          <label>Takeoff Time</label>
+          <div class="time-row">
+            <input type="text" class="takeoff-time" placeholder="Not set" readonly />
+            <button type="button" class="time-btn takeoff-btn">Stamp Time</button>
+          </div>
+        </div>
+
+        <div class="form-group timestamp-group">
+          <label>Landing Time</label>
+          <div class="time-row">
+            <input type="text" class="landing-time" placeholder="Not set" readonly />
+            <button type="button" class="time-btn landing-btn">Stamp Time</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Battery % After Landing</label>
+          <input type="number" class="battery-end" min="0" max="100" placeholder="Enter %" />
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
