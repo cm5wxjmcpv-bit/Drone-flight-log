@@ -13,12 +13,10 @@ function init() {
   const saved = loadSession();
 
   if (saved && Array.isArray(saved.flights) && saved.flights.length > 0) {
-    saved.flights.forEach(flight => renderFlightCard(flight, false));
+    saved.flights.forEach((flight) => renderFlightCard(flight, false));
   } else {
     addFlight();
   }
-
-  renumberFlights();
 
   addFlightBtn.addEventListener("click", () => {
     addFlight();
@@ -29,8 +27,14 @@ function init() {
 }
 
 function createFlightData() {
+  const existingFlights = collectFlights();
+  const highestFlightNumber = existingFlights.length
+    ? Math.max(...existingFlights.map(f => Number(f.flightNumber) || 0))
+    : 0;
+
   return {
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+    flightNumber: highestFlightNumber + 1,
     batteryNumber: "",
     batteryStart: "",
     takeoffTime: "",
@@ -42,15 +46,16 @@ function createFlightData() {
 function addFlight(flightData = null) {
   const data = flightData || createFlightData();
   renderFlightCard(data, true);
-  renumberFlights();
 }
 
 function renderFlightCard(data, addToTop = true) {
   const fragment = flightTemplate.content.cloneNode(true);
   const card = fragment.querySelector(".flight-card");
 
-  card.dataset.id = data.id;
+  card.dataset.id = data.id || "";
+  card.dataset.flightNumber = data.flightNumber || "";
 
+  const flightNumberEl = fragment.querySelector(".flight-number");
   const batteryNumber = fragment.querySelector(".battery-number");
   const batteryStart = fragment.querySelector(".battery-start");
   const takeoffTime = fragment.querySelector(".takeoff-time");
@@ -60,6 +65,7 @@ function renderFlightCard(data, addToTop = true) {
   const landingBtn = fragment.querySelector(".landing-btn");
   const removeBtn = fragment.querySelector(".remove-flight-btn");
 
+  flightNumberEl.textContent = data.flightNumber || "";
   batteryNumber.value = data.batteryNumber || "";
   batteryStart.value = data.batteryStart || "";
   takeoffTime.value = data.takeoffTime || "";
@@ -82,7 +88,6 @@ function renderFlightCard(data, addToTop = true) {
 
   removeBtn.addEventListener("click", () => {
     card.remove();
-    renumberFlights();
     saveSession();
   });
 
@@ -93,14 +98,6 @@ function renderFlightCard(data, addToTop = true) {
   }
 }
 
-function renumberFlights() {
-  const cards = [...document.querySelectorAll(".flight-card")];
-  cards.forEach((card, index) => {
-    const numberEl = card.querySelector(".flight-number");
-    numberEl.textContent = index + 1;
-  });
-}
-
 function getCurrentTimestamp() {
   const now = new Date();
   return now.toLocaleString();
@@ -109,9 +106,9 @@ function getCurrentTimestamp() {
 function collectFlights() {
   const cards = [...document.querySelectorAll(".flight-card")];
 
-  return cards.map(card => ({
+  return cards.map((card) => ({
     id: card.dataset.id || "",
-    flightNumber: card.querySelector(".flight-number")?.textContent || "",
+    flightNumber: Number(card.dataset.flightNumber) || "",
     batteryNumber: card.querySelector(".battery-number")?.value || "",
     batteryStart: card.querySelector(".battery-start")?.value || "",
     takeoffTime: card.querySelector(".takeoff-time")?.value || "",
