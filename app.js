@@ -1,4 +1,4 @@
-const SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxuixEhXTav0BquFKKJE057CLLvYRvId1xi4vOxJPb0oQba-G-CggduW7LZDSYpPPIF/exec";
 const STORAGE_KEY = "drone_tracking_session_v1";
 
 const flightsContainer = document.getElementById("flightsContainer");
